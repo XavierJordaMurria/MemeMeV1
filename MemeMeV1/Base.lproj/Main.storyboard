@@ -107,9 +107,6 @@
                                 <exclude reference="E8c-0H-ofo"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="9Ac-UA-zTS"/>
-                                <exclude reference="Pja-tl-duD"/>
-                                <exclude reference="Yhj-9I-Igf"/>
                                 <exclude reference="4yu-tO-oKa"/>
                                 <exclude reference="Djl-2m-gyJ"/>
                                 <exclude reference="d7g-Ay-bOg"/>
@@ -121,6 +118,9 @@
                                 <exclude reference="nRX-Vc-Jew"/>
                                 <exclude reference="MpU-R7-jIY"/>
                                 <exclude reference="k6P-bk-9ch"/>
+                                <exclude reference="9Ac-UA-zTS"/>
+                                <exclude reference="Pja-tl-duD"/>
+                                <exclude reference="Yhj-9I-Igf"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -131,9 +131,6 @@
                                 <include reference="E8c-0H-ofo"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="9Ac-UA-zTS"/>
-                                <include reference="Pja-tl-duD"/>
-                                <include reference="Yhj-9I-Igf"/>
                                 <include reference="4yu-tO-oKa"/>
                                 <include reference="Djl-2m-gyJ"/>
                                 <include reference="d7g-Ay-bOg"/>
@@ -145,6 +142,9 @@
                                 <include reference="nRX-Vc-Jew"/>
                                 <include reference="MpU-R7-jIY"/>
                                 <include reference="k6P-bk-9ch"/>
+                                <include reference="9Ac-UA-zTS"/>
+                                <include reference="Pja-tl-duD"/>
+                                <include reference="Yhj-9I-Igf"/>
                             </mask>
                         </variation>
                     </view>
