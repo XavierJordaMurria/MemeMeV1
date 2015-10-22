@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainMemeViewController.swift
 //  MemeMe V1.0
 //
 //  Created by Xavier Jorda Murria on 19/09/2015.
@@ -8,14 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFieldDelegate,
+class MainMemeViewController: UIViewController,UIImagePickerControllerDelegate, UITextFieldDelegate,
     UINavigationControllerDelegate
 {
+    let TOOL_BAR_HEIGHT:int = 44
+    
     @IBOutlet weak var imagePickerView: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var topTextView: UITextField!
     @IBOutlet weak var bottomTextView: UITextField!
     @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var pickerBar: UIToolbar!
     
     @IBOutlet weak var bottomBar: UIToolbar!
     let TOP_TEXT_ID     = "TopTextField"
@@ -40,20 +43,13 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-         print("ViewController viewDidLoad")
-
-        topTextView.delegate = self
-        topTextView.defaultTextAttributes = memeTextAttributes
-        topTextView.textAlignment = NSTextAlignment.Center
-        topTextView.text = "TOP TEXT"
+        print("ViewController viewDidLoad")
         
-        bottomTextView.delegate = self
-        bottomTextView.defaultTextAttributes = memeTextAttributes
-        bottomTextView.textAlignment = NSTextAlignment.Center
-        bottomTextView.text = "BOTTOM TEXT BOTTOM TEXT BOTTOM TEXT BOTTOM TEXT BOTTOM TEXT"
+        setTextViewProperties(topTextView, textInit: "TOP TEXT")
+        setTextViewProperties(bottomTextView, textInit: "BOTTOM TEXT BOTTOM TEXT BOTTOM TEXT BOTTOM TEXT BOTTOM TEXT")
         
         //Looks for single or multiple taps.
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         view.addGestureRecognizer(tap)
         
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -78,7 +74,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
     }
-
+    
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
@@ -89,7 +85,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
     {
         return hideStatusBar
     }
-
+    
     @IBAction func pickerButton(sender: AnyObject)
     {
         let pickerController = UIImagePickerController()
@@ -115,13 +111,21 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
     }
     
     //Calls this function when the tap is recognized.
-    func DismissKeyboard()
+    func dismissKeyboard()
     {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
-// MARK: - KeyBoard Notifications
+    func setTextViewProperties(text:UITextField, textInit:String)
+    {
+        text.delegate = self
+        text.defaultTextAttributes = memeTextAttributes
+        text.textAlignment = NSTextAlignment.Center
+        text.text = textInit
+    }
+    
+    // MARK: - KeyBoard Notifications
     
     func subscribeToKeyboardNotifications()
     {
@@ -139,23 +143,24 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
     {
         print("ViewController keyboardWillShow with \(showKeyBoardWithScreenMoved), \(movedKeyBoardUp)")
         
-        hideShowNavStatusBar(false);
+        pickerBar.hidden = true
         
         if(showKeyBoardWithScreenMoved && !movedKeyBoardUp)
         {
-            view.frame.origin.y -= getKeyboardHeight(notification)
+            view.frame.origin.y -= (getKeyboardHeight(notification)-TOOL_BAR_HEIGHT)
             movedKeyBoardUp = true
         }
     }
     
     func keyboardWillHide(notification: NSNotification)
     {
-        hideShowNavStatusBar(false)
-        
         print("ViewController keyboardWillHide with \(showKeyBoardWithScreenMoved), \(movedKeyBoardUp)")
+        
+        pickerBar.hidden = false
+        
         if(showKeyBoardWithScreenMoved && movedKeyBoardUp)
         {
-            view.frame.origin.y += getKeyboardHeight(notification)
+            view.frame.origin.y += (getKeyboardHeight(notification)-TOOL_BAR_HEIGHT)
             movedKeyBoardUp = false
         }
     }
@@ -166,26 +171,26 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.CGRectValue().height
     }
-
-// MARK: -
-
+    
+    // MARK: -
+    
     func save()
     {
         //Create the meme
         let meme = MemeModel.init(topText: topTextView.text!, bottomText: bottomTextView.text!, image: imagePickerView.image!, memeImage: generateMemedImage())
-
-        UIImageWriteToSavedPhotosAlbum(meme.getMemeStruct().memeImage!, nil, nil, nil);
-
+        
+        UIImageWriteToSavedPhotosAlbum(meme.memeImage!, nil, nil, nil);
+        
         let shareText = "saved MEME"
         let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
         
         presentViewController(activityViewController,
-                                animated: true,
-                                completion:
-                                nil)
+            animated: true,
+            completion:
+            nil)
     }
     
-// MARK: - UIImagePickerControllerDelegate methods
+    // MARK: - UIImagePickerControllerDelegate methods
     
     func imagePickerController(picker: UIImagePickerController,didFinishPickingMediaWithInfo info: [String : AnyObject])
     {
@@ -197,13 +202,13 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
         
         dismissViewControllerAnimated(true, completion: nil)
     }
-
+    
     func imagePickerControllerDidCancel(picker: UIImagePickerController)
     {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-// MARK: - UITextFieldDelegate
+    // MARK: - UITextFieldDelegate
     func textFieldDidBeginEditing(textField: UITextField)
     {
         if let textID = textField.restorationIdentifier as String?
@@ -241,8 +246,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
     
     func textFieldDidEndEditing(textField: UITextField)
     {
-         print("ViewController textFieldDidEndEditing")
-        
+        print("ViewController textFieldDidEndEditing")
     }
     
     func generateMemedImage() -> UIImage
@@ -262,20 +266,18 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UITextFi
         return memedImage
     }
     
-// MARK- PRIVATE METHODS
+    // MARK- PRIVATE METHODS
     private func hideShowNavStatusBar(hide: Bool)
     {
         if(hide)
         {
             hideStatusBar = true
-            navigationController?.setNavigationBarHidden(navigationController?.navigationBarHidden == true, animated: true) //or animated: false
-             navigationController?.setNavigationBarHidden(true, animated: true)
+            navigationController?.setNavigationBarHidden(navigationController?.navigationBarHidden == true, animated: true)
         }
         else
         {
             hideStatusBar = false
-            navigationController?.setNavigationBarHidden(navigationController?.navigationBarHidden == false, animated: true) //or animated: false
-             navigationController?.setNavigationBarHidden(false, animated: true)
+            navigationController?.setNavigationBarHidden(navigationController?.navigationBarHidden == false, animated: true)
         }
     }
 }

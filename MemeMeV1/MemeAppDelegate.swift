@@ -1,5 +1,5 @@
 //
-//  AppDelegate.swift
+//  MemeAppDelegate.swift
 //  MemeMe V1.0
 //
 //  Created by Xavier Jorda Murria on 19/09/2015.
@@ -9,7 +9,7 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class MemeAppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 

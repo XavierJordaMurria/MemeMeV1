@@ -9,7 +9,7 @@
         <!--Bar-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MemeMeV1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainMemeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="MainMemeViewController" customModule="MemeMeV1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -162,6 +162,7 @@
                         <outlet property="bottomTextView" destination="E8c-0H-ofo" id="Xbf-bD-Vjo"/>
                         <outlet property="cameraButton" destination="X8a-2O-Bd9" id="05D-Of-Obj"/>
                         <outlet property="imagePickerView" destination="h0g-r0-DRE" id="f7I-WB-GSc"/>
+                        <outlet property="pickerBar" destination="wLX-2L-9Nd" id="EiT-nh-dwp"/>
                         <outlet property="shareButton" destination="exi-8i-uRA" id="Euv-by-53L"/>
                         <outlet property="topTextView" destination="9oK-qp-WXi" id="LTs-oK-exC"/>
                     </connections>
