@@ -11,7 +11,7 @@ import UIKit
 class MainMemeViewController: UIViewController,UIImagePickerControllerDelegate, UITextFieldDelegate,
     UINavigationControllerDelegate
 {
-    let TOOL_BAR_HEIGHT:int = 44
+    let TOOL_BAR_HEIGHT:CGFloat = 44
     
     @IBOutlet weak var imagePickerView: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -187,7 +187,11 @@ class MainMemeViewController: UIViewController,UIImagePickerControllerDelegate, 
         presentViewController(activityViewController,
             animated: true,
             completion:
-            nil)
+            { () -> Void in
+                print("activityViewController onCompletion")
+                self.hideShowNavStatusBar(false)
+            })
+ 
     }
     
     // MARK: - UIImagePickerControllerDelegate methods
@@ -261,14 +265,13 @@ class MainMemeViewController: UIViewController,UIImagePickerControllerDelegate, 
         
         UIGraphicsEndImageContext()
         
-        hideShowNavStatusBar(false)
-        
         return memedImage
     }
     
     // MARK- PRIVATE METHODS
     private func hideShowNavStatusBar(hide: Bool)
     {
+        print("hideShowNavStatusBar ==> \(hide)")
         if(hide)
         {
             hideStatusBar = true
