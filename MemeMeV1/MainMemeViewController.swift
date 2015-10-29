@@ -107,7 +107,30 @@ class MainMemeViewController: UIViewController,UIImagePickerControllerDelegate, 
     
     @IBAction func shareButton(sender: AnyObject)
     {
-        save()
+        let shareText = "saved MEME"
+        let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+        
+        presentViewController(activityViewController,
+            animated: true,
+            completion:
+            { () -> Void in
+                print("activityViewController onCompletion")
+                self.hideShowNavStatusBar(false)
+        })
+        // Define completion handler
+        
+        activityViewController.completionWithItemsHandler =
+        {
+            (activity, success, items, error) in
+            print("Activity: \(activity) Success: \(success) Items: \(items) Error: \(error)")
+            
+            if(success)
+            {
+                self.save()
+            }
+            
+            self.hideShowNavStatusBar(false)
+        }
     }
     
     //Calls this function when the tap is recognized.
@@ -180,17 +203,6 @@ class MainMemeViewController: UIViewController,UIImagePickerControllerDelegate, 
         let meme = MemeModel.init(topText: topTextView.text!, bottomText: bottomTextView.text!, image: imagePickerView.image!, memeImage: generateMemedImage())
         
         UIImageWriteToSavedPhotosAlbum(meme.memeImage!, nil, nil, nil);
-        
-        let shareText = "saved MEME"
-        let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
-        
-        presentViewController(activityViewController,
-            animated: true,
-            completion:
-            { () -> Void in
-                print("activityViewController onCompletion")
-                self.hideShowNavStatusBar(false)
-            })
  
     }
     
